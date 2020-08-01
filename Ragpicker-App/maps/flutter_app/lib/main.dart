@@ -1,3 +1,4 @@
+import 'package:android_intent/android_intent.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -47,9 +48,20 @@ class MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    setSourceAndDestinationIcons();
+    navigation();
   }
 
+  void navigation() async {
+    String origin="somestartLocationStringAddress or lat,long";  // lat,long like 123.34,68.56
+    String destination="someEndLocationStringAddress or lat,long";
+      final AndroidIntent intent = new AndroidIntent(
+          action: 'action_view',
+          data: Uri.encodeFull(
+              "https://www.google.com/maps/dir/?api=1&origin=" +
+                  SOURCE_LOCATION.toString() + "&destination=" + DEST_LOCATION.toString() + "&travelmode=driving&dir_action=navigate"),
+          package: 'com.google.android.apps.maps');
+      await intent.launch();
+  }
   void setMapPins() {
     // source pin
 
