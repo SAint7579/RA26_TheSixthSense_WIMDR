@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Smart Waste Detector</string>
+    <string name="title_activity_garbage_locations">Map</string>
+</resources>

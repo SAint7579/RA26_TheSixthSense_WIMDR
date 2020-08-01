@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/listview_round_back"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="15dp"
+        android:elevation="15dp">
+
+        <TextView
+            android:id="@+id/PickerNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Atharva Barve"
+            android:textColor="#403B3B"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/GarbageLocationPerPincode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/PickerNameTV"
+            android:layout_alignBottom="@+id/PickerNameTV"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/PickerNameTV"
+            android:fontFamily="@font/poppins_semibold"
+            android:paddingVertical="4dp"
+            android:paddingStart="5dp"
+            android:text="Tasks finished successfully : 5"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/ChoosePicker"
+            android:layout_width="113dp"
+            android:layout_height="37dp"
+            android:layout_below="@+id/PickerNameTV"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/gradient_round_btn"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Choose"
+            android:textColor="#FFF" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

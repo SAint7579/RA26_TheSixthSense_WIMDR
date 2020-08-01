@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "652423184854",
+    "firebase_url": "https://smart-waste-locator.firebaseio.com",
+    "project_id": "smart-waste-locator",
+    "storage_bucket": "smart-waste-locator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652423184854:android:a757d81cfcf23af4336477",
+        "android_client_info": {
+          "package_name": "com.example.smartwastedetector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652423184854-a3h84s8e4nvvv476oink106bmmt7qjgd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArCP3uZvpKQZ6uDvyaF4393F-lhwaYeLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652423184854-a3h84s8e4nvvv476oink106bmmt7qjgd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

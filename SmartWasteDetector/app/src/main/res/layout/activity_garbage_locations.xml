@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".GarbageLocations"
+    android:id="@+id/parentRl">
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ScreenDismissButton"
+        android:visibility="gone"
+        android:background="#00FFFFFF"
+        />
+
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        >
+
+    </fragment>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/whiteMenuView"
+        android:background="@drawable/whitebubbleview">
+
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="70dp"/>
+
+<!--        <androidx.appcompat.widget.SearchView-->
+<!--            android:id="@+id/search_bar"-->
+<!--            android:layout_width="275dp"-->
+<!--            android:layout_height="34dp"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_marginTop="70dp"-->
+<!--            android:background="#52A7A7A7"-->
+<!--            app:queryHint="Search location"-->
+<!--            />-->
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/MenuBtn"
+        android:layout_alignBottom="@+id/MenuBtn"
+        android:id="@+id/HomeTV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:fontFamily="@font/amaranth_bold"
+        android:text="HOME"
+        android:textColor="#1C1C1C"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+    <ImageButton
+        android:id="@+id/MenuBtn"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/map"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="#00000000"
+        android:src="@drawable/menu" />
+
+    <Button
+        android:id="@+id/AssignTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/roundbutton"
+        android:elevation="10dp"
+        android:fontFamily="@font/amaranth_bold"
+        android:text="Garbage Near by"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:visibility="gone"/>
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bmb_buttonEnum="ham"
+        app:bmb_piecePlaceEnum="piecePlace_ham_4"
+        app:bmb_buttonPlaceEnum="buttonPlace_ham_4"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        />
+
+
+    <ImageButton
+        android:id="@+id/MyLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/MenuBtn"
+        android:layout_alignBottom="@+id/MenuBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:background="#00FFFFFF"
+        android:src="@drawable/mylocationpin" />
+
+
+    <ListView
+        android:id="@+id/PincodesListView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_above="@+id/bmb"
+        android:divider="#00FFFFFF"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/listview_round_back"
+        android:elevation="15dp"
+        android:visibility="visible" />
+
+</RelativeLayout>
