@@ -119,11 +119,12 @@ class _CaptureState extends State<Capture> {
 //    }
 
     var count = 0;
-    database.child("'image' + '${count}'").push().set({
+    database.child("'image - $count'").push().set({
       'image' : imageRef,
-      'latitude' : widget.latitude,
-      'longitude' : widget.longitude,
+      'time' : DateTime.now().toString(),
     });
+
+    count++;
   }
 
 //  enableUpload() async{
@@ -149,12 +150,15 @@ class _CaptureState extends State<Capture> {
     });
   }
 
-  List<Widget>renderBoxes(Size screen){
+  List<Widget> renderBoxes(Size screen){
     if(_recognitions == null) {
       upload();
       return [];
     }
-    if(_imageWidth == null || _imageHeight == null) return [];
+    if(_imageWidth == null || _imageHeight == null) {
+      upload();
+      return [];
+    }
 
     double factorX = screen.width;
     double factorY = _imageHeight / _imageHeight * screen.width;
