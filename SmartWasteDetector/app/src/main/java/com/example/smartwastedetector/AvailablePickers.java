@@ -28,8 +28,24 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class AvailablePickers extends AppCompatActivity {
+    public class task{
+        public double latitude,longitude;
+        public boolean Completed;
+
+        public task(double latitude, double longitude, boolean completed) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            Completed = completed;
+        }
+
+
+    }
+
+
+
     //Database variables
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference();
@@ -43,6 +59,7 @@ public class AvailablePickers extends AppCompatActivity {
     ArrayList<String> garbageLocationIds = new ArrayList<>();
 
     String pincode;
+    double latitude,longitude;
 
     // Views
     ListView pickerLV;
@@ -83,6 +100,9 @@ public class AvailablePickers extends AppCompatActivity {
                 if(map != null){
                     if(String.valueOf(map.get("Pincode")).equals(pincode)){
                         garbageLocationIds.add(dataSnapshot.getKey());
+                        latitude = Double.parseDouble(String.valueOf(map.get("latitude")));
+                        longitude = Double.parseDouble(String.valueOf(map.get("longitude")));
+
                     }
                 }
             }
@@ -192,6 +212,11 @@ public class AvailablePickers extends AppCompatActivity {
                             updatePickerID.put("collectorid",pickersIds.get(position));
                             ref.child("Detected").child(id).updateChildren(updatePickerID);
 
+                            task newTask = new task(latitude,longitude,false);
+                            final String uniqueID = UUID.randomUUID().toString();
+                            String taskID = (uniqueID.substring(uniqueID.length()-8));
+
+                            ref.child("users").child(pickersIds.get(position)).child("Tasks").child(taskID).setValue(newTask);
                             Toast.makeText(AvailablePickers.this, "This Picker has been assigned to the pickup task", Toast.LENGTH_SHORT).show();
                             finish();
 

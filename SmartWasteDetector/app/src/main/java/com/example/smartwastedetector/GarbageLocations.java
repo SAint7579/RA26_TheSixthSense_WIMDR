@@ -35,6 +35,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.smartwastedetector.Services.NotificationService;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -130,6 +131,12 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ///Creating notification service
+        Intent notificationServiceIntent = new Intent(GarbageLocations.this, NotificationService.class);
+        startService(notificationServiceIntent);
+
+
 
         // Start the autocomplete intent.
 
@@ -286,12 +293,61 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
 
             }else{
 
-                Toast.makeText(this,"Unble to Trace your location",Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(this,"Unable to Trace your location",Toast.LENGTH_SHORT).show();
+                getLocationUsingCoarse();
             }
         }
     }
 
+    public void getLocationUsingCoarse(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
+            Log.d("INNN HEREEEE","YESS");
+
+        } else {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Log.d("INNN HEREEEE","YESS");
+
+            Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location2 = locationManager.getLastKnownLocation(LocationManager. PASSIVE_PROVIDER);
+//            Log.d("LAT IS ", String.valueOf(location.getLatitude()));
+
+            if (location != null) {
+
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                Log.d("LAT IS ", String.valueOf(latitude));
+                Log.d("Long is ", String.valueOf(longitude));
+
+            } else  if (location1 != null) {
+                latitude = location1.getLatitude();
+                longitude = location1.getLongitude();
+
+
+                Log.d("LAT1 IS ", String.valueOf(latitude));
+                Log.d("Long1 is ", String.valueOf(longitude));
+
+
+
+            } else  if (location2 != null) {
+                latitude = location2.getLatitude();
+                longitude = location2.getLongitude();
+
+                Log.d("LAT2 IS ", String.valueOf(latitude));
+                Log.d("Long2 is ", String.valueOf(longitude));
+
+
+            }else{
+
+                Toast.makeText(this,"Unable to Trace your location",Toast.LENGTH_SHORT).show();
+//                getLocationUsingCoarse();
+            }
+        }
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
