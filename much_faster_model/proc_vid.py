@@ -6,6 +6,7 @@ from time import time
 IMG_HEIGHT = 320
 IMG_WIDTH = 320
 
+tflite_path = 'new_model_0_75/my_model_fp32.tflite'
 tflite_path = 'new_model_0_75_-1to1/my_model_fp32_320x320.tflite'
 tflite_interpreter = tf.lite.Interpreter(model_path=tflite_path)
 tflite_interpreter.allocate_tensors()
@@ -14,7 +15,7 @@ tflite_output_details = tflite_interpreter.get_output_details()
 
 cam = cv2.VideoCapture('../garbage_detection/vid.mp4')
 fps = 40#round(cam.get(cv2.CAP_PROP_FPS))
-writer = cv2.VideoWriter('segout_bb.mp4',cv2.VideoWriter_fourcc(*'mp4v'), fps,(IMG_WIDTH,IMG_HEIGHT))
+# writer = cv2.VideoWriter('segout_bb2.mp4',cv2.VideoWriter_fourcc(*'mp4v'), fps,(IMG_WIDTH,IMG_HEIGHT))
 
 cv2.namedWindow("output", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("output", 600,600)
@@ -72,11 +73,11 @@ while cam.isOpened():
 		# print("FPS:", fps)
 		counter = 0
 		start = time()
-	writer.write(heated)
+	# writer.write(heated)
 	key = cv2.waitKey(1) & 0xff
 	if key == ord('q'):
 		break
 
 cv2.destroyAllWindows()
-# writer.release()
 cam.release()
+# writer.release()
