@@ -21,7 +21,7 @@ while True:
 		f=0
 		try:
 			ret,img = cam.read()
-			img = cv2.resize(img, (320, 320))
+			img = cv2.resize(img, (300, 300))
 			encoded, enimg = cv2.imencode('.jpg',img)
 			handler.send_data_small(enimg,IP,PORT)
 		except KeyboardInterrupt:
