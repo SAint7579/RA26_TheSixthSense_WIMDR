@@ -2,8 +2,8 @@ from time import sleep
 import requests
 
 API_ENDPOINT = "http://annotate.ret2rop.com:31896/monitoring/"
-uid = "DEVICE 1 ID"
-data = {"uid": uid, "auth-toekn": "ENTER_AUTH_TOKEN"}
+uid = "first"
+data = {"uid": uid, "auth-token": "ENTER_AUTH_TOKEN"}
 
 
 while True:
