@@ -40,5 +40,28 @@ This model works on the server side. Using SSDMobileNetv2, we can identify diffe
 ### Screenshot:
 <img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/segregation.PNG"></img>
 
+### Requirements to run the model:
+#### Tech Stack:
+- Tensorflow 2.3
+- OpenCV
+
+#### Instructions:
+In the repo directory "RA26_TheSixthSense_WIMDR/segregation_model/", open the "proc_video.py" file and add an image source to the variable IMDIR. Running the code will show you the output of the image with the type of waste tagged. You can also check some created outputs in the directory "RA26_TheSixthSense_WIMDR/segregation_model/detect_out/".
+
+## Others
+
+### Device Render:
+This is a basic render of the device made on rhinoceros 6. It represents the basic design of the device which will be mounted on the vehicles to detect garbage.<br>
+File Location : ""
+This file require rhinoceros 6 to view.
+### The Device:
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/render.PNG"></img>
+
+
+### Activity Monitoring System:
+This is a simple webpage that tells the administrator about which devices are active. This is done by sending a ping every one minute to a central server. If a ping is not recived for 2 minutes, the device is declared offline. 
+### Screenshot:
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/monitor.png"></img>
+
 
 
