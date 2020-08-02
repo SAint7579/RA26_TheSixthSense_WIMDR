@@ -7,7 +7,8 @@
   There are various aspects associated with it that include - 
   
   1. Our Customised fully convoluted Architecture, which has provened to be superior than the existing Comp Vision Algorithms that can be used for Garbage Detecton. 
-  It works on 36 FPS with more than 96% Accuracy on the other hand, the SSD Mobile Net 2 which is being used for this task earlier has 13.5 FPS and 80% Accuracy. 
+  It works at 36 FPS with more than 96.5% Accuracy on the other hand, the SSD Mobile Net 2 which is being used for this task earlier has 13.5 FPS with lower precision 
+  on the same device at same resolution. Instead of just getting a rectagular bounding box, our model also generate a segmentation map accurately depicting area and layout of garbage.
   Our model is more faster and lightweight, accurate than any existing system and we are planning to initiate the Patenting process for our System Architecture after the competition.
   
   2. The algorithm is embedded in our Customised Device which we are planning to make by ourself. This device shall be mounted over any moving vehicle and as the vehicles like City Buses, 
