@@ -1,18 +1,36 @@
 # RA26_TheSixthSense_WIMDR
 
-## Smart Waste Locator
+# Smart Waste Locator
 
   We present our idea of Smart Waste Locator system which is an **Automated Waste Detection System** based on Computer Vision Algorithms.
   
-  There are various aspects associated with it that include - 
-  
-  1. Our Customised fully convoluted Architecture, which has provened to be superior than the existing Comp Vision Algorithms that can be used for Garbage Detecton. 
-  It works at 36 FPS with more than 96.5% Accuracy on the other hand, the SSD Mobile Net 2 which is being used for this task earlier has 13.5 FPS with lower precision 
-  on the same device at same resolution. Instead of just getting a rectagular bounding box, our model also generate a segmentation map accurately depicting area and layout of garbage.
-  Our model is more faster and lightweight, accurate than any existing system and we are planning to initiate the Patenting process for our System Architecture after the competition.
-  
-  2. The algorithm is embedded in our Customised Device which we are planning to make by ourself. This device shall be mounted over any moving vehicle and as the vehicles like City Buses, 
-  Taxi, etc moves through out the city, the device would capture the garbage along with its Geolocations on the map and send the data to the central cloud server.
-  NOTE - We are just uploading the Images and Location of the detected garbage and not the Video feed, so it won't violate any privacy of the citizens.
-  
-  3. The central server which we are going with is Google Firebase, it is connected with a Website and Mobile App of Garbage Pickers.
+# Modules:
+
+## Waste Detection
+
+We have created a custom model with modified MobileNetv3 as the backbone that finds the segmentation maps of the waste detected. This model works faster than most of the light weight image processing models like SSD MobileNetv2. Along with that, rather than just giving a bounding box, our model gives a full segmentation map that traces the waste.
+
+### Screenshot:
+
+- <b> Our Segmentation map model: </b>
+<br>
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/seg_map.png" width="640" height="640"></img>
+
+- <b> Optimized SSD MobileNetv3: </b>
+<br>
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/ssd.png" width="640" height="640"></img>
+
+
+We can see that the frame rate on our model is around 3 times faster than the conventional SSD model. You can check a full output video in the location "RA26_TheSixthSense_WIMDR/blob/master/much_faster_model/segout_bb.mp4".
+
+### Requirements to run the model:
+#### Tech Stack:
+- Tensorflow 2.3
+- Tflite
+- OpenCV
+
+#### Instructions:
+In the repo directory "RA26_TheSixthSense_WIMDR/much_faster_model/", run the "proc_video.py" file with all the above libraries installed. The video source there can be replaced by any file or by the camera output by initializing the "cam" variable to cv2.VideoCapture(0).
+
+
+
