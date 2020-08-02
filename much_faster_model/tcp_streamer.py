@@ -10,20 +10,25 @@ class tcp_handler(object):
 	def make_listener(self,ip,port):
 		self.sock.bind((ip,port))
 		self.sock.listen()
-		self.conn,addr=self.sock.accept()
+		self.conn,addr = self.sock.accept()
 
 	def connect(self,ip,port):
 		self.sock.connect((ip,port))
+		self.conn = self.sock
 
-	def send_data(self,img,ip,port):
-		data=img.tobytes()
-		dln=pack('f',np.float32(len(data)))
+	def send_data(self,data,ip,port):
+		dln = pack('f',np.float32(len(data)))
 		self.sock.send(dln+data)
 
 	def get_data(self):
 		bdln = self.conn.recv(4)
-		dln=int(unpack('f', bdln)[0])
-		return self.conn.recv(dln)
+		if len(bdln) != 4:
+			return None
+		dln = int(unpack('f', bdln)[0])
+		try:
+			return self.conn.recv(dln)
+		except (OverflowError,ValueError):
+			return None
 
 	def close(self):
 		self.sock.close()
