@@ -24,10 +24,10 @@ import 'package:image/image.dart' as img;
 //}
 
 class Capture extends StatefulWidget {
-  Capture(this.latitude,this.longitude,this.area,this.pincode) : super();
+  Capture(this.latitude,this.longitude) : super();
 
   final double latitude,longitude;
-  final String area,pincode;
+//  final String area,pincode;
 
   @override
   _CaptureState createState() => _CaptureState();
@@ -118,9 +118,8 @@ class _CaptureState extends State<Capture> {
 //      Text('🔥🔥🔥');
 //    }
 
-    database.child('${widget.area}').push().set({
-      'Area' : widget.area,
-      'Pincode' : widget.pincode,
+    var count = 0;
+    database.child("'image' + '${count}'").push().set({
       'image' : imageRef,
       'latitude' : widget.latitude,
       'longitude' : widget.longitude,
@@ -152,11 +151,8 @@ class _CaptureState extends State<Capture> {
 
   List<Widget>renderBoxes(Size screen){
     if(_recognitions == null) {
-      FloatingActionButton(
-        child: Icon(Icons.add_photo_alternate),
-        tooltip: "Upload image",
-        onPressed: upload,
-      );      return [];
+      upload();
+      return [];
     }
     if(_imageWidth == null || _imageHeight == null) return [];
 
@@ -247,9 +243,9 @@ class _CaptureState extends State<Capture> {
         case 'Click':
           selectFromImagePicker();
           break;
-        case 'Upload':
-          upload();
-          break;
+//        case 'Upload':
+//          selectFromImagePicker();
+//          break;
       }
     }
 
@@ -261,7 +257,7 @@ class _CaptureState extends State<Capture> {
             PopupMenuButton<String>(
               onSelected: handleClick,
               itemBuilder: (BuildContext context) {
-                return {'Click', 'Upload'}.map((String choice) {
+                return {'Click'}.map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),
@@ -298,24 +294,6 @@ class _CaptureState extends State<Capture> {
                 padding: EdgeInsets.only(top:470.0,left: 100.0),
                 child: Text(
                   (widget.longitude).toString(),
-                  style: TextStyle(
-                    fontSize: 21.0,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top:520.0,left: 100.0),
-                child: Text(
-                  (widget.area).toString(),
-                  style: TextStyle(
-                    fontSize: 21.0,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top:570.0,left: 100.0),
-                child: Text(
-                  (widget.pincode).toString(),
                   style: TextStyle(
                     fontSize: 21.0,
                   ),

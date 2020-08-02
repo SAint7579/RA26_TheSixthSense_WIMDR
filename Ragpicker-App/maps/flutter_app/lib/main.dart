@@ -1,4 +1,5 @@
 import 'package:android_intent/android_intent.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,6 +11,10 @@ import 'models/pin_pill_info.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'screens/marks.dart';
 import 'screens/captureImg.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
 void main() => runApp(
     MaterialApp(
@@ -23,6 +28,7 @@ const double CAMERA_TILT = 0;
 const double CAMERA_BEARING = 30;
 const LatLng SOURCE_LOCATION = LatLng(42.7477863, -71.1699932);
 const LatLng DEST_LOCATION = LatLng(42.6871386, -71.2143403);
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class MapPage extends StatefulWidget {
   @override
@@ -49,6 +55,48 @@ class MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     navigation();
+    setupNotification();
+
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('mipmap/ic_launcher');
+    var ios = new IOSInitializationSettings();
+    var initSettings = new InitializationSettings(android,ios);
+    flutterLocalNotificationsPlugin.initialize(initSettings,onSelectNotification: selectNotification);
+  }
+
+  Future selectNotification(String payload){
+    showDialog(context: context,builder: (_) => new AlertDialog(
+      title: new Text('Notification'),
+      content: new Text('$payload'),
+    ));
+
+  }
+
+  showNotifications() async{
+    var android = new AndroidNotificationDetails('channel id', 'channel NAME', 'channel DESC');
+    var ios = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, ios);
+    await flutterLocalNotificationsPlugin.show(0,'Notification','New Task Assigned!!',platform,payload: 'New Task Assigned');
+  }
+
+  void setupNotification() async{
+    _firebaseMessaging.getToken().then((token){
+      print(token);
+    });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String,dynamic> message) async{
+        print("onMessage called");
+      },
+      onResume: (Map<String,dynamic> message) async{
+        print("onResume called");
+      },
+      onLaunch: (Map<String,dynamic> message) async{
+        print("onLaunch called");
+    },
+    );
+
+
   }
 
   void navigation() async {

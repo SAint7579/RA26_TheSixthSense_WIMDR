@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,9 +10,17 @@ import 'Marks.dart';
 import 'captureImg.dart';
 import 'package:maps/services/auth.dart';
 
-void main() => runApp(MyApp());
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+//void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
+  MyApp(this.uid) : super();
+
+  final String uid;
+  
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -19,6 +28,7 @@ class MyApp extends StatefulWidget {
 const double CAMERA_ZOOM = 13;
 const double CAMERA_TILT = 0;
 const double CAMERA_BEARING = 30;
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class _MyAppState extends State<MyApp> {
 
@@ -35,6 +45,7 @@ class _MyAppState extends State<MyApp> {
   double _lat,_lng;
   Map<MarkerId, Marker> markers = <MarkerId, Marker> {};
   List<Marker> marksList = [];
+  StreamSubscription<Event> _onTodoAddedSubscription;
 
 
   @override
@@ -44,7 +55,14 @@ class _MyAppState extends State<MyApp> {
 //    populateClients();
     super.initState();
 
-    DatabaseReference marksRef = FirebaseDatabase.instance.reference().child("Detected");
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('mipmap/ic_launcher');
+    var ios = new IOSInitializationSettings();
+    var initSettings = new InitializationSettings(android,ios);
+    flutterLocalNotificationsPlugin.initialize(initSettings,onSelectNotification: selectNotification);
+
+
+    DatabaseReference marksRef = FirebaseDatabase.instance.reference().child("users").child(widget.uid).child("Tasks");
 
     marksRef.once().then((DataSnapshot snap){
       var KEYS = snap.value.keys;
@@ -56,14 +74,12 @@ class _MyAppState extends State<MyApp> {
         Marks marks = new Marks(
           DATA[individualKey]['latitude'],
           DATA[individualKey]['longitude'],
-          DATA[individualKey]['Area'],
-          DATA[individualKey]['Pincode'],
         );
         marksList.add(Marker(
           markerId: MarkerId('marker'),
           onTap: (){
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Capture(marks.latitude,marks.longitude,marks.area,marks.pincode)));
+                context, MaterialPageRoute(builder: (context) => Capture(marks.latitude,marks.longitude)));
           },
           position: LatLng(marks.latitude,marks.longitude),
         ),);
@@ -73,6 +89,51 @@ class _MyAppState extends State<MyApp> {
         print('Length - $marksList.length');
       });
     });
+
+    FirebaseDatabase _database = FirebaseDatabase.instance;
+    DatabaseReference ref = _database.reference().child("users").child(widget.uid).child("Tasks");
+
+    _onTodoAddedSubscription = ref.onChildAdded.listen(_onEntryadded);
+
+  }
+  _onEntryadded(Event event){
+
+    showNotifications();
+  }
+
+  Future selectNotification(String payload){
+    showDialog(context: context,builder: (_) => new AlertDialog(
+      title: new Text('Notification'),
+      content: new Text('$payload'),
+    ));
+
+  }
+
+  showNotifications() async{
+    var android = new AndroidNotificationDetails('channel id', 'channel NAME', 'channel DESC');
+    var ios = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, ios);
+    await flutterLocalNotificationsPlugin.show(0,'Notification','New Task Assigned!!',platform,payload: 'New Task Assigned');
+  }
+
+  void setupNotification() async{
+    _firebaseMessaging.getToken().then((token){
+      print(token);
+    });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String,dynamic> message) async{
+        print("onMessage called");
+      },
+      onResume: (Map<String,dynamic> message) async{
+        print("onResume called");
+      },
+      onLaunch: (Map<String,dynamic> message) async{
+        print("onLaunch called");
+      },
+    );
+
+
   }
 
 //  void getCurrentLocation() async {
@@ -155,6 +216,7 @@ class _MyAppState extends State<MyApp> {
 //      ),
 //    );
 //  }
+
 
   @override
   Widget build(BuildContext context){

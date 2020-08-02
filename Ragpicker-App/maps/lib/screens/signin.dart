@@ -109,20 +109,18 @@ class _MyAppState extends State<SignIn>{
                               fontWeight: FontWeight.bold,
                             ),),
                           onPressed: () async {
+                            dynamic result = await _auth.signInWithEmailAndPassword(email.trim(), password);
                             if (_formKey.currentState.validate()) {
-                              dynamic result = await _auth.signInWithEmailAndPassword(email.trim(), password);
-                              User user = result;
                               if (result == null) {
                                 setState(() {
                                   error = 'Could not sign in';
                                 });
                               }
                               else {
-                                user_id = user.uid;
-                                print(user_id);
+                                user_id = await _auth.currentUser();
                                 Navigator.push(
                                     context, MaterialPageRoute(
-                                    builder: (context) => MyApp()));
+                                    builder: (context) => MyApp(user_id)));
                               }
                             }
                           },

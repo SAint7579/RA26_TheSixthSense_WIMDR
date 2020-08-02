@@ -15,6 +15,7 @@ class _SignUpScreenState extends State<SignUp> {
   String email = '';
   String password = '';
   String error = '';
+  String user_id = '';
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +57,17 @@ class _SignUpScreenState extends State<SignUp> {
                   SizedBox(height: 30.0,),
                   RaisedButton(
                     onPressed: () async{
+                      dynamic result = await _auth.registerWithEmailAndPassword(email.trim(), password);
                       if(_formKey.currentState.validate()){
-                        dynamic result = await _auth.registerWithEmailAndPassword(email.trim(), password);
                         if (result == null){
                           setState(() {
                             error = 'Please supply a valid email';
                           });
                         }
                         else{
+                          user_id = await _auth.currentUser();
                           Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => MyApp()));
+                        context, MaterialPageRoute(builder: (context) => MyApp(user_id)));
                         }
                       }
 //                    Navigator.push(
