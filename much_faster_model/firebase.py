@@ -73,4 +73,4 @@ def add_data(image,latitude,longitude):
 
 def GenerateRandomCoordinates():
     #Generate Random Coordiantes in Pune
-    return [np.random.uniform(18.4311,18.5995), np.random.uniform(73.7469,73.9474)]
+    return [float("%1.4f"%(np.random.uniform(18.4311,18.5995))), float("%1.4f"%(np.random.uniform(73.7469,73.9474)))]
