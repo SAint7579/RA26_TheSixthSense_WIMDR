@@ -1,6 +1,6 @@
 class Marks{
   double latitude,longitude;
-  String area,pincode;
+//  String area,pincode;
 
-  Marks(this.latitude,this.longitude,this.area,this.pincode);
+  Marks(this.latitude,this.longitude);
 }
