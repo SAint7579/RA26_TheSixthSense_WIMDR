@@ -15,4 +15,4 @@
   Taxi, etc moves through out the city, the device would capture the garbage along with its Geolocations on the map and send the data to the central cloud server.
   NOTE - We are just uploading the Images and Location of the detected garbage and not the Video feed, so it won't violate any privacy of the citizens.
   
-  3. The central server which we are going with is Gogle Firebase, it is connected with a Website and Mobile App of Garbage Pickers.
+  3. The central server which we are going with is Google Firebase, it is connected with a Website and Mobile App of Garbage Pickers.

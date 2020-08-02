@@ -1,0 +1,35 @@
+item {
+	id: 1
+	name: 'Plastic'
+}
+
+item {
+	id: 2
+	name: 'Unlabeled_litter'
+}
+
+item {
+	id: 3
+	name: 'Metal'
+}
+
+item {
+	id: 4
+	name: 'Glass'
+}
+
+item {
+	id: 5
+	name: 'Paper'
+}
+
+item {
+	id: 6
+	name: 'Bottle'
+}
+
+item {
+	id: 7
+	name: 'Food_waste'
+}
+
