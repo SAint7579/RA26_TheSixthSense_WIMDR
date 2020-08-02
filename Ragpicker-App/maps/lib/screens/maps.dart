@@ -28,6 +28,7 @@ class MyApp extends StatefulWidget {
 const double CAMERA_ZOOM = 13;
 const double CAMERA_TILT = 0;
 const double CAMERA_BEARING = 30;
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class _MyAppState extends State<MyApp> {
@@ -78,8 +79,7 @@ class _MyAppState extends State<MyApp> {
         marksList.add(Marker(
           markerId: MarkerId('marker'),
           onTap: (){
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Capture(marks.latitude,marks.longitude)));
+
           },
           position: LatLng(marks.latitude,marks.longitude),
         ),);
@@ -217,6 +217,19 @@ class _MyAppState extends State<MyApp> {
 //    );
 //  }
 
+  void handleClick(String value) {
+    switch (value) {
+      case 'Click':
+        {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Capture()));
+        }
+        break;
+//        case 'Upload':
+//          selectFromImagePicker();
+//          break;
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -231,6 +244,22 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: handleClick,
+              itemBuilder: (BuildContext context) {
+                return {'Click'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+        ),
 //        appBar: AppBar(
 //          title: Text('Maps Sample App'),
 //          backgroundColor: Colors.lightGreen,

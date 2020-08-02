@@ -24,9 +24,9 @@ import 'package:image/image.dart' as img;
 //}
 
 class Capture extends StatefulWidget {
-  Capture(this.latitude,this.longitude) : super();
+  Capture() : super();
 
-  final double latitude,longitude;
+//  final double latitude,longitude;
 //  final String area,pincode;
 
   @override
@@ -255,8 +255,8 @@ class _CaptureState extends State<Capture> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Maps Sample App"),
-          backgroundColor: Colors.lightGreen,
+        title: Text('Image'),
+          backgroundColor: Colors.transparent,
           actions: <Widget>[
             PopupMenuButton<String>(
               onSelected: handleClick,
@@ -285,24 +285,24 @@ class _CaptureState extends State<Capture> {
               Stack(
                 children: stackChildren,
                 ),
-              Padding(
-                padding: EdgeInsets.only(top:420.0,left: 100.0),
-                child: Text(
-                  (widget.latitude).toString(),
-                  style: TextStyle(
-                    fontSize: 21.0,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top:470.0,left: 100.0),
-                child: Text(
-                  (widget.longitude).toString(),
-                  style: TextStyle(
-                    fontSize: 21.0,
-                  ),
-                ),
-              ),
+//              Padding(
+//                padding: EdgeInsets.only(top:420.0,left: 100.0),
+//                child: Text(
+//                  (widget.latitude).toString(),
+//                  style: TextStyle(
+//                    fontSize: 21.0,
+//                  ),
+//                ),
+//              ),
+//              Padding(
+//                padding: EdgeInsets.only(top:470.0,left: 100.0),
+//                child: Text(
+//                  (widget.longitude).toString(),
+//                  style: TextStyle(
+//                    fontSize: 21.0,
+//                  ),
+//                ),
+//              ),
           ],
           ),
     );
