@@ -5,33 +5,44 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import googlemaps
+from time import time
 import numpy as np
+import cv2
+
 # Fetch the service account key JSON file contents
 try:
-    cred = credentials.Certificate('../../smart-waste-locator-firebase-adminsdk-ljjzx-495a7e327a.json')
+    cred = credentials.Certificate('../smart-waste-locator-firebase-adminsdk-ljjzx-495a7e327a.json')
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://smart-waste-locator.firebaseio.com/'
     })
 except:
     print("Already Initialized")
-    
-gmaps_keys = googlemaps.Client(key = "AIzaSyDeuccZuXIp4Ncemlzgqs8YoKfg3xixJ-c")
+
+with open("../appkey","r") as f:
+    appkey = f.read()[:-1]
+
+gmaps_keys = googlemaps.Client(key = appkey)
     
 
 def cloud_upload_image(image):
     try:
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="../../smart-waste-locator-firebase-adminsdk-ljjzx-495a7e327a.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="../smart-waste-locator-firebase-adminsdk-ljjzx-495a7e327a.json"
         # Enable firebase Storage
         client = storage.Client()
         # Reference an existing bucket.
         bucket = client.get_bucket('smart-waste-locator.appspot.com')
-        # Upload a local file to a new file to be created in your bucket. 
-        path = "./"+image
-        Blob = bucket.blob(image)
-        Blob.upload_from_filename(filename=path)
+        # Upload a local file to a new file to be created in your bucket.
+        imname = str(time())+'.jpg'
+        # path = "./"+imname
+        Blob = bucket.blob(imname)
+        encoded, enimg = cv2.imencode('.jpg', image)
+        if not Blob.exists():
+            Blob.upload_from_string(enimg.tobytes(), content_type='image/jpeg')
+            print("Image Uploaded")
+        # Blob.upload_from_filename(filename=path)
         #returning the url
-        return 'https://firebasestorage.googleapis.com/v0/b/smart-waste-locator.appspot.com/o/'+image+'?alt=media'
+        return 'https://firebasestorage.googleapis.com/v0/b/smart-waste-locator.appspot.com/o/'+imname+'?alt=media'
     except:
         return None
     
