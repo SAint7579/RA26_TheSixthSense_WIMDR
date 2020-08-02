@@ -33,4 +33,12 @@ We can see that the frame rate on our model is around 3 times faster than the co
 In the repo directory "RA26_TheSixthSense_WIMDR/much_faster_model/", run the "proc_video.py" file with all the above libraries installed. The video source there can be replaced by any file or by the camera output by initializing the "cam" variable to cv2.VideoCapture(0).
 
 
+## Waste Segregation
+
+This model works on the server side. Using SSDMobileNetv2, we can identify different elements of the garbage dump. This will help the managers and collectors to identify the type of dump, therefore enabling them to facilitate the waste segregation during collection.
+
+### Screenshot:
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/segregation.PNG"></img>
+
+
 
