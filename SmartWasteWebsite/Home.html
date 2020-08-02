@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC7k0qn_fkOTXuKWE9CXpW_JS-itdITuQ&libraries=places" async defer type="text/javascript"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="Home.js"></script>
+<link rel="stylesheet" href="Home.css">
+
+
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+<script>
+	// Your web app's Firebase configuration
+	var firebaseConfig = {
+	  apiKey: "AIzaSyDeuccZuXIp4Ncemlzgqs8YoKfg3xixJ-c",
+	  authDomain: "smart-waste-locator.firebaseapp.com",
+	  databaseURL: "https://smart-waste-locator.firebaseio.com",
+	  projectId: "smart-waste-locator",
+	  storageBucket: "smart-waste-locator.appspot.com",
+	  messagingSenderId: "652423184854",
+	  appId: "1:652423184854:web:e09fa0f1cd56a7c5336477",
+	  measurementId: "G-5JJ2CXHT58"
+	};
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.analytics();
+  </script>
+
+</head>
+<body onload="initMap()"> 
+
+
+<div id="Home">
+	<svg class="Rectangle_ce">
+		<rect id="Rectangle_ce" rx="10" ry="10" x="0" y="0" width="372" height="1020">
+		</rect>
+	</svg>
+	<svg class="Rectangle_cf">
+		<rect id="Rectangle_cf" rx="10" ry="10" x="0" y="0" width="548" height="1020">
+		</rect>
+	</svg>
+
+	<!-- <div id="MAP_CSS">
+		<iframe width="1000" height="1000" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" id="gmap_canvas" src="https://maps.google.com/maps?width=1000&amp;height=1000&amp;hl=en&amp;q=%20Pune+(Map)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe> <a href='https://www.embedmap.net/'>google widgets</a> <script type='text/javascript' src='https://embedmaps.com/google-maps-authorization/script.js?id=414b31d98a80f786fc50696c813b1dbfd82c8844'></script>
+	</div> -->
+	
+	<!-- <div id="MAP_CSS" class="modal-header bg-info text-white" style="position:relative;">
+		<input id="pac-input" class="controls mb-1" type="text" placeholder="Search Your Location..." style="width: calc(100% - 50px);">
+		<a class="btn pt-1" onclick="initMap()" style="position: absolute;right: 21px;"><i style="color:black;" class="material-icons">&#xe55c;</i></a>
+		<div id="map"></div>
+	</div> -->
+
+	<!-- Modal-3 
+	<div class="modal fade" id="location-modal" data-backdrop="false" data-target="modal" tabindex="-1" role="dialog" aria-labelledby="location-modal" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				
+				<div class="modal-header bg-info text-white" style="background-color: #85C1E9;">
+					<h5 class="modal-title" id="address-label" style="display: inline-block;font-family: Segoe UI;font-size: 15px;color: white;">Choose Location</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="display: inline-block;">
+						<span aria-hidden="true" style="display: inline-block; color: #fff;">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style=" position:relative;">
+					<input id="pac-input" class="controls" type="text" placeholder="Search Your Location...">
+					<a class="btn" onclick="initMap()" style="position: absolute;right: 21px;"><i style="color:black;" class="material-icons">&#xe55c;</i></a>
+					<div id="map"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info" data-dismiss="modal" style="font-family:Segoe UI;font-size: 15px;" id="done"><i class='fas fa-check mr-2'></i> Done</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+-->
+
+
+
+<div>
+	<div>
+		<input id="pac-input" class="controls" type="text" placeholder="Search Your Location...">
+		<a class="btn" style="position: absolute;right: 21px;"><i style="color:black;" class="material-icons">&#xe55c;</i></a>
+		<div id="map"></div>
+	</div>
+	<div>
+		<button type="button" class="btn btn-info" style="font-family:Segoe UI;font-size: 15px;" id="done"><i class='fas fa-check mr-2'></i> Done</button>
+	</div>
+</div>
+	
+
+
+
+	<div id="Heading_3_ch" class="Heading_3">
+		<div id="Heading_4" class="Heading_4">
+			<div id="Preview">
+				<span>Preview</span>
+			</div>
+		</div>
+	</div>
+	<div id="Scroll_Group_1">
+		<div id="Repeat_Grid_1">
+			<div id="Group_1" class="Group_1">
+				<svg class="Path_1" viewBox="0 0 320 180">
+					<path id="Path_1" d="M 0 0 L 320 0 L 320 180 L 285.959716796875 180 L 232.109375 180 L 0 180 L 0 0 Z">
+					</path>
+				</svg>
+				<div id="ID00000000">
+					<span>00/00/0000</span>
+				</div>
+				<div id="ID0000_PM">
+					<span>00:00 PM</span>
+				</div>
+				<img id="Image_1" src="Image_1.png" srcset="Image_1.png 1x, Image_1@2x.png 2x">
+			</div>
+			<div id="Group_1_cr" class="Group_1">
+				<svg class="Path_1_cs" viewBox="0 0 320 180">
+					<path id="Path_1_cs" d="M 0 0 L 320 0 L 320 180 L 285.959716796875 180 L 232.109375 180 L 0 180 L 0 0 Z">
+					</path>
+				</svg>
+				<div id="ID00000000_ct">
+					<span>00/00/0000</span>
+				</div>
+				<div id="ID0000_PM_cu">
+					<span>00:00 PM</span>
+				</div>
+				<img id="Image_1_cv" src="Image_1_cv.png" srcset="Image_1_cv.png 1x, Image_1_cv@2x.png 2x">
+			</div>
+			<div id="Group_1_cw" class="Group_1">
+				<svg class="Path_1_cx" viewBox="0 0 320 180">
+					<path id="Path_1_cx" d="M 0 0 L 320 0 L 320 180 L 285.959716796875 180 L 232.109375 180 L 0 180 L 0 0 Z">
+					</path>
+				</svg>
+				<div id="ID00000000_cy">
+					<span>00/00/0000</span>
+				</div>
+				<div id="ID0000_PM_cz">
+					<span>00:00 PM</span>
+				</div>
+				<img id="Image_1_c" src="Image_1_c.png" srcset="Image_1_c.png 1x, Image_1_c@2x.png 2x">
+			</div>
+			<div id="Group_1_c" class="Group_1">
+				<svg class="Path_1_c" viewBox="0 0 320 180">
+					<path id="Path_1_c" d="M 0 0 L 320 0 L 320 180 L 285.959716796875 180 L 232.109375 180 L 0 180 L 0 0 Z">
+					</path>
+				</svg>
+				<div id="ID00000000_c">
+					<span>00/00/0000</span>
+				</div>
+				<div id="ID0000_PM_c">
+					<span>00:00 PM</span>
+				</div>
+				<img id="Image_1_da" src="Image_1_da.png" srcset="Image_1_da.png 1x, Image_1_da@2x.png 2x">
+			</div>
+			<div id="Group_1_da" class="Group_1">
+				<svg class="Path_1_da" viewBox="0 0 320 180">
+					<path id="Path_1_da" d="M 0 0 L 320 0 L 320 180 L 285.959716796875 180 L 232.109375 180 L 0 180 L 0 0 Z">
+					</path>
+				</svg>
+				<div id="ID00000000_da">
+					<span>00/00/0000</span>
+				</div>
+				<div id="ID0000_PM_da">
+					<span>00:00 PM</span>
+				</div>
+				<img id="Image_1_db" src="Image_1_db.png" srcset="Image_1_db.png 1x, Image_1_db@2x.png 2x">
+			</div>
+			<div id="Group_1_db" class="Group_1">
+				<svg class="Path_1_dc" viewBox="0 0 320 180">
+					<path id="Path_1_dc" d="M 0 0 L 320 0 L 320 180 L 285.959716796875 180 L 232.109375 180 L 0 180 L 0 0 Z">
+					</path>
+				</svg>
+				<div id="ID00000000_dd">
+					<span>00/00/0000</span>
+				</div>
+				<div id="ID0000_PM_de">
+					<span>00:00 PM</span>
+				</div>
+				<img id="Image_1_df" src="Image_1_df.png" srcset="Image_1_df.png 1x, Image_1_df@2x.png 2x">
+			</div>
+			<div id="Group_1_dg" class="Group_1">
+				<svg class="Path_1_dh" viewBox="0 0 320 180">
+					<path id="Path_1_dh" d="M 0 0 L 320 0 L 320 180 L 285.959716796875 180 L 232.109375 180 L 0 180 L 0 0 Z">
+					</path>
+				</svg>
+				<div id="ID00000000_di">
+					<span>00/00/0000</span>
+				</div>
+				<div id="ID0000_PM_dj">
+					<span>00:00 PM</span>
+				</div>
+				<img id="Image_1_dk" src="Image_1_dk.png" srcset="Image_1_dk.png 1x, Image_1_dk@2x.png 2x">
+			</div>
+		</div>
+	</div>
+	<div id="Heading_4_dl" class="Heading_4">
+		<div id="Region">
+			<span>Region</span>
+		</div>
+	</div>
+	<div id="Group_2">
+		<svg class="Rectangle_4">
+			<rect id="Rectangle_4" rx="0" ry="0" x="0" y="0" width="1920" height="60">
+			</rect>
+		</svg>
+		<div id="Heading_3_dp" class="Heading_3">
+			<div id="Smart_Waste_Manager">
+				<span>Smart Waste Manager</span>
+			</div>
+		</div>
+		<div id="Heading_4_dr" class="Heading_4">
+			<div id="Pune_IN">
+				<span>Pune IN</span>
+			</div>
+		</div>
+		<img id="usericon" src="usericon.png" srcset="usericon.png 1x, usericon@2x.png 2x">
+	</div>
+	
+	<!-- <div>
+		<div>
+			<input id="pac-input" class="controls" type="text" placeholder="Search Your Location...">
+			<a class="btn" onclick="initMap()" style="position: absolute;right: 21px;"><i style="color:black;" class="material-icons">&#xe55c;</i></a>
+			<div id="map"></div>
+		</div>
+		<div>
+			<button type="button" class="btn btn-info" style="font-family:Segoe UI;font-size: 15px;" id="done"><i class='fas fa-check mr-2'></i> Done</button>
+		</div>
+	</div> -->
+	<button id="Button" class="Button">
+		<svg class="Rectangle_3_dv">
+			<rect id="Rectangle_3_dv" rx="10" ry="10" x="0" y="0" width="123" height="47">
+			</rect>
+		</svg>
+		<div id="Search">
+			<span onClick = "initMap()" data-toggle="modal" data-target="#location-modal">Search</span>
+		</div>
+	</button>
+
+
+	<input class="SearchBox" class="controls" type="text" placeholder="Search Your Location...">
+		<rect rx="0" ry="0" x="0" y="0" width="361" height="47">
+		</rect>
+	</input>
+	
+	<div id="Enter_Pincode">
+		<span>Enter Area</span>
+	</div>
+	<div id="Heading_4_dz" class="Heading_4">
+		<div id="Garbage_Point">
+			<span>Garbage Point</span>
+		</div>
+	</div>
+	<input class="Rectangle_9">
+		<rect id="Rectangle_9" rx="0" ry="0" x="0" y="0" width="497" height="47">
+		</rect>
+	</input>
+	<div id="Select_Garbage_locations_in_re">
+		<span>Select Garbage locations in region</span>
+	</div>
+	<div id="Heading_4_d" class="Heading_4">
+		<div id="Assign">
+			<span>Assign</span>
+		</div>
+	</div>
+	<select class="Rectangle_10">
+		<rect id="Rectangle_10" rx="0" ry="0" x="0" y="0" width="497" height="47">
+		</rect>
+	</select>
+	<div id="Assign_personnel_to_collect_ga">
+		<span>Assign personnel to collect garbage</span>
+	</div>
+	<button id="Button_d" class="Button">
+		<svg class="Rectangle_3_d">
+			<rect id="Rectangle_3_d" rx="10" ry="10" x="0" y="0" width="123" height="47">
+			</rect>
+		</svg>
+		<div id="Assign_d">
+			<span>Assign</span>
+		</div>
+	</button>
+	<div id="Heading_4_ea" class="Heading_4">
+		<div id="Assigned">
+			<span>Assigned</span>
+		</div>
+	</div>
+	<div id="Heading_4_ec" class="Heading_4">
+		<div id="Unassigned">
+			<span>Unassigned</span>
+		</div>
+	</div>
+	<svg class="Line_1" viewBox="0 0 497 1">
+		<path id="Line_1" d="M 0 0 L 497 0">
+		</path>
+	</svg>
+	<div id="Heading_4_ef" class="Heading_4">
+		<div id="Current_Region">
+			<span>Current Region</span>
+		</div>
+	</div>
+	<div id="Heading_4_eh" class="Heading_4">
+		<div id="ID99">
+			<span>99</span>
+		</div>
+	</div>
+	<div id="Heading_4_ej" class="Heading_4">
+		<div id="ID99_ek">
+			<span>99</span>
+		</div>
+	</div>
+	<svg class="Line_2" viewBox="0 0 497 1">
+		<path id="Line_2" d="M 0 0 L 497 0">
+		</path>
+	</svg>
+	<div id="Heading_4_em" class="Heading_4">
+		<div id="Region_Stats">
+			<span>Region Stats</span>
+		</div>
+	</div>
+	<div id="Heading_4_eo" class="Heading_4">
+		<div id="Assigned_ep">
+			<span>Assigned</span>
+		</div>
+	</div>
+	<div id="Heading_4_eq" class="Heading_4">
+		<div id="ID99_er">
+			<span>99</span>
+		</div>
+	</div>
+	<div id="Heading_4_es" class="Heading_4">
+		<div id="Collected">
+			<span>Collected</span>
+		</div>
+	</div>
+	<div id="Heading_4_eu" class="Heading_4">
+		<div id="ID99_ev">
+			<span>99</span>
+		</div>
+	</div>
+	<a href="https://www.sih.gov.in">
+	<div id="Short_link_ew" class="Short_link">
+		<div id="_The_Sixth_Sense_ex">
+			<span>© The Sixth Sense</span>
+		</div>
+	</div>
+	</a>
+</div>
+
+
+
+
+
+</body>
+</html>
