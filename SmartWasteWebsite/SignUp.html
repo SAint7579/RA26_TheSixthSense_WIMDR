@@ -11,7 +11,26 @@
 
 <style id="applicationStylesheet" type="text/css"></style>
 <link rel="stylesheet" href="SignUp.css">
-
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+<script>
+	// Your web app's Firebase configuration
+	var firebaseConfig = {
+	  apiKey: "AIzaSyDeuccZuXIp4Ncemlzgqs8YoKfg3xixJ-c",
+	  authDomain: "smart-waste-locator.firebaseapp.com",
+	  databaseURL: "https://smart-waste-locator.firebaseio.com",
+	  projectId: "smart-waste-locator",
+	  storageBucket: "smart-waste-locator.appspot.com",
+	  messagingSenderId: "652423184854",
+	  appId: "1:652423184854:web:e09fa0f1cd56a7c5336477",
+	  measurementId: "G-5JJ2CXHT58"
+	};
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.analytics();
+  </script>
 <script id="applicationScript">
 ///////////////////////////////////////
 // INITIALIZATION
@@ -2884,12 +2903,12 @@ window.application = new Application();
 			<span>Password</span>
 		</div>
 	</div>
-	<div onclick="application.goToTargetView(event)" id="Login_link" class="Login_link">
+	<div onclick="goToLogin();" id="Login_link" class="Login_link">
 		<div id="Have_an_account__Log_In">
 			<span>Have an account ? </span><span style="color:rgba(56,113,67,1);">Log In</span>
 		</div>
 	</div>
-	<button  onclick="signUp();" id="SignUp_button" class="SignUp_button">
+	<button onclick="signUp();" id="SignUp_button" class="SignUp_button">
 		<svg class="Rectangle_3_bl">
 			<rect id="Rectangle_3_bl" rx="10" ry="10" x="0" y="0" width="195" height="47">
 			</rect>
@@ -2907,5 +2926,14 @@ window.application = new Application();
 	</div>
 	</a>
 </div>
+
+<script type="text/javascript" >
+
+	function goToLogin() {
+		window.location.replace("index.html");
+	}
+
+</script>
+
 </body>
 </html>

@@ -2832,7 +2832,7 @@ function initMap(){
 
     $("#location-modal").modal();
     $("#Search").val("");
-    var location = new google.maps.LatLng(0, 0);
+    var location = new google.maps.LatLng(18.573369, 73.875861);
     var mapProperty = {
      center:location,
      zoom:15,

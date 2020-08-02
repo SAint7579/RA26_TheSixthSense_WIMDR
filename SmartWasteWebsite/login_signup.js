@@ -59,7 +59,6 @@ function login(){
   
   var email = document.getElementById("EmailTextField").value;
   var password = document.getElementById("PasswordTextField").value;
-  var name = document.getElementById("NameTextField").value;
 
   console.log("email is ",email);
   firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -75,7 +74,11 @@ function login(){
 
 }
 
-function signup(){
+function signUp(){
+  var email = document.getElementById("EmailTextField").value;
+  var password = document.getElementById("PasswordTextField").value;
+  var name = document.getElementById("NameTextField").value;
+
   firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
     
     alert(error.message);
@@ -91,9 +94,11 @@ function signup(){
 function writeUserData(userId, name, email) {
   firebase.database().ref('users/' + userId).set({
     username: name,
-    email: email,
-    profile_picture : imageUrl
-  }).then(function() {
+    email: email
+    }).then(function() {
     window.location.replace("Home.html");
+  }).catch(function(err) {
+    alert(error.message);
+
   });
 }
