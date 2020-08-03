@@ -52,10 +52,10 @@ In the repo directory "RA26_TheSixthSense_WIMDR/segregation_model/", open the "p
 
 ### Device Render:
 This is a basic render of the device made on rhinoceros 6. It represents the basic design of the device which will be mounted on the vehicles to detect garbage.<br>
-File Location : ""
+File Location : "RA26_TheSixthSense_WIMDR/Device Render.3dm"
 This file require rhinoceros 6 to view.
 ### The Device:
-<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/render.PNG"></img>
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/device_render.gif"  width="500" height="320"></img>
 
 
 ### Activity Monitoring System:
