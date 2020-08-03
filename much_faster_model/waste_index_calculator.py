@@ -6,9 +6,8 @@ from firebase_admin import credentials
 from firebase_admin import db
 import googlemaps
 import numpy as np
-
 try:
-    cred = credentials.Certificate('../smart-waste-locator-firebase-adminsdk-ljjzx-495a7e327a.json')
+    cred = credentials.Certificate('../../smart-waste-locator-firebase-adminsdk-ljjzx-495a7e327a.json')
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://smart-waste-locator.firebaseio.com/'
