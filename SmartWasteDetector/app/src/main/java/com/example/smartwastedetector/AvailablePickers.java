@@ -60,6 +60,8 @@ public class AvailablePickers extends AppCompatActivity {
 
     String pincode;
     double latitude,longitude;
+    ArrayList<Double> latitudes = new ArrayList<>();
+    ArrayList<Double> longitudes = new ArrayList<>();
 
     // Views
     ListView pickerLV;
@@ -100,8 +102,8 @@ public class AvailablePickers extends AppCompatActivity {
                 if(map != null){
                     if(String.valueOf(map.get("Pincode")).equals(pincode)){
                         garbageLocationIds.add(dataSnapshot.getKey());
-                        latitude = Double.parseDouble(String.valueOf(map.get("latitude")));
-                        longitude = Double.parseDouble(String.valueOf(map.get("longitude")));
+                        latitudes.add(Double.parseDouble(String.valueOf(map.get("latitude"))));
+                        longitudes.add(Double.parseDouble(String.valueOf(map.get("longitude"))));
 
                     }
                 }
