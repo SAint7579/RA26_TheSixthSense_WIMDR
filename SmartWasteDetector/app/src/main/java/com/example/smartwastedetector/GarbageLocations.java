@@ -14,9 +14,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -29,6 +32,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -45,6 +49,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -58,10 +63,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomMenuButton;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -99,8 +110,10 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
     ArrayList<String> ragPickersID = new ArrayList<>();
     ArrayList<Long> ragPickersNumbers = new ArrayList<>();
     ArrayList<String> finalPincodes = new ArrayList<>();
+    ArrayList<String> garbagePicsURL = new ArrayList<>();
 
     ArrayList<String> garbageLocationIds = new ArrayList<>();
+    ArrayList<Double> garbageIndices = new ArrayList<>();
 
     ArrayList<Integer> pincodesFrequencies = new ArrayList<>();
 
@@ -121,8 +134,8 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
     BitmapDescriptor icon;
     ListView pincodeLV;
     SupportMapFragment mapFragment;
-
-
+    ImageView garbagePic;
+    KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +175,7 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
+            buildAlertMessageNoGps("Please Turn ON your GPS Connection");
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
         }
@@ -174,6 +187,7 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
         menuBtn = findViewById(R.id.MenuBtn);
         menuBtn.setOnClickListener(BtnListener);
         parentRl = findViewById(R.id.parentRl);
+        garbagePic = findViewById(R.id.garbagePic);
 //        parentRl.setOnClickListener(BtnListener);
         screenDismissBtn = findViewById(R.id.ScreenDismissButton);
         screenDismissBtn.setOnClickListener(BtnListener);
@@ -366,7 +380,11 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
 
 
         // Add a marker in Sydney and move the camera
-        LatLng myLocation = new LatLng(latitude, longitude);
+//        LatLng myLocation = new LatLng(latitude, longitude);
+
+        //// For Emulator
+        LatLng myLocation = new LatLng(18.573361, 73.875861);
+
         mMap.addMarker(new MarkerOptions()
             .position(myLocation)
             .icon(icon)
@@ -375,18 +393,80 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
 
         // Create a LatLngBounds that includes Australia.
         LatLngBounds INDIA = new LatLngBounds(
-                new LatLng(latitude, longitude), new LatLng(latitude, longitude));
+                new LatLng(18.573361, 73.875861), new LatLng(18.573361, 73.875861));
         // Set the camera to the greatest possible zoom level that includes the bounds
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(INDIA, 15));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(INDIA.getCenter(), 50));
 
-        for(int i =0;i<longitudes.size();i++){
-            Log.d("GARBAGELOCATIONS",String.valueOf(latitudes.get(i)));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(latitudes.get(i), longitudes.get(i))).title("Garbage here!"));
-        }
+//        for(int i =0;i<longitudes.size();i++){
+//            Log.d("GARBAGELOCATIONS",String.valueOf(latitudes.get(i)));
+//            mMap.addMarker(new MarkerOptions().position(new LatLng(latitudes.get(i), longitudes.get(i))).title(String.valueOf(i)));
+//        }
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                garbagePic.setVisibility(View.GONE);
+                collapseView(pincodeLV,pincodeLV.getLayoutParams().height,0);
+
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+              Log.d("MARKER_CLICKED", String.valueOf(marker.getTitle()));
+
+                garbagePic.setVisibility(View.GONE);
+                new DownloadImageTask(garbagePic,garbagePicsURL.get(Integer.parseInt(marker.getTitle()))).execute();
+
+
+                return false;
+            }
+        });
     }
 
 
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+        String url;
+        public DownloadImageTask(ImageView bmImage,String url) {
+            this.bmImage = bmImage;
+            this.url = url;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            hud = KProgressHUD.create(GarbageLocations.this)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setLabel("Loading")
+                    .setMaxProgress(100).show();
+
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = url;
+            Bitmap bmp = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                bmp = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                hud.dismiss();
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return bmp;
+        }
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setVisibility(View.VISIBLE);
+            hud.dismiss();
+            bmImage.setImageBitmap(result);
+        }
+    }
     public void placeLocation(){
 
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
@@ -460,7 +540,9 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
                         garbageLocationIds.add(String.valueOf(dataSnapshot.getKey().toString()));
                         latitudes.add(Double.parseDouble(String.valueOf(map.get("latitude"))));
                         longitudes.add(Double.parseDouble(String.valueOf(map.get("longitude"))));
+                        garbagePicsURL.add(String.valueOf(map.get("image")));
                         pinCodes.add(String.valueOf(map.get("Pincode")));
+
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -472,6 +554,22 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
                                         finalPincodes.add(element);
                                         pincodesFrequencies.add(Collections.frequency(pinCodes,element));
 
+                                        ref.child("Indexes").addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                                                for(String pincode: finalPincodes){
+                                                    garbageIndices.add(Double.parseDouble(String.valueOf(map.get(pincode))));
+                                                    Log.d("INDEX ",String.valueOf(map.get(pincode)));
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
 
                                 }
@@ -508,7 +606,7 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
 
                         ragPickersID.add((String.valueOf(dataSnapshot.getKey())));
                         ragPickersNames.add((String.valueOf(map.get("Name"))));
-                        ragPickersNumbers.add(Long.parseLong(String.valueOf("Number")));
+//                        ragPickersNumbers.add(Long.parseLong(String.valueOf("Number")));
 
 
 
@@ -535,6 +633,8 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
                     }
                 });
 
+
+
             }
         }).start();
 
@@ -551,9 +651,10 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
             mMap.addMarker(new MarkerOptions()
                  .position(new LatLng(latitudes.get(i), longitudes.get(i)))
                  .icon(icon)
-                 .title("Garbage here!"));
+                 .title(String.valueOf(i)));
         }
     }
+
 
 
 
@@ -589,7 +690,20 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
                 pincodeTV = convertView.findViewById(R.id.PickerNameTV);
                 pincodeTV.setText(finalPincodes.get(position));
 
+
                 assignBtn = convertView.findViewById(R.id.ChoosePicker);
+
+                if(position < garbageIndices.size()) {
+                    Log.d(" INDICE ", String.valueOf(garbageIndices.get(position)));
+
+                    if(garbageIndices.get(position) > 20000.0) {
+                        assignBtn.setBackgroundResource(R.drawable.extreme_index);
+                    }else if(garbageIndices.get(position) > 8000.0){
+                        assignBtn.setBackgroundResource(R.drawable.medium_index);
+                    }else if(garbageIndices.get(position) < 8000.0){
+                        assignBtn.setBackgroundResource(R.drawable.low_index);
+                    }
+                }
                 assignBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -608,6 +722,9 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
             return convertView;
         }
     }
+
+
+
 
         //Create an anonymous implementation of OnClickListener
     private View.OnClickListener BtnListener = new View.OnClickListener() {
@@ -647,6 +764,10 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
         }
     };
 
+
+
+
+
     boolean isTouch;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -671,6 +792,10 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
         }
         return true;
     }
+
+
+
+
     public void expandView(final View v,int initialHt,int finalHt){
 
         ObjectAnimator.ofFloat(menuBtn, "rotation", 0f, 90f).start();
@@ -718,10 +843,10 @@ public class GarbageLocations extends FragmentActivity implements OnMapReadyCall
         set.start();
 
     }
-    protected void buildAlertMessageNoGps() {
+    protected void buildAlertMessageNoGps(String message) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Please Turn ON your GPS Connection")
+        builder.setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {

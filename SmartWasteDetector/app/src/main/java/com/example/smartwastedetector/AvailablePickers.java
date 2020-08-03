@@ -60,6 +60,8 @@ public class AvailablePickers extends AppCompatActivity {
 
     String pincode;
     double latitude,longitude;
+    ArrayList<Double> latitudes = new ArrayList<>();
+    ArrayList<Double> longitudes = new ArrayList<>();
 
     // Views
     ListView pickerLV;
@@ -100,8 +102,8 @@ public class AvailablePickers extends AppCompatActivity {
                 if(map != null){
                     if(String.valueOf(map.get("Pincode")).equals(pincode)){
                         garbageLocationIds.add(dataSnapshot.getKey());
-                        latitude = Double.parseDouble(String.valueOf(map.get("latitude")));
-                        longitude = Double.parseDouble(String.valueOf(map.get("longitude")));
+                        latitudes.add(Double.parseDouble(String.valueOf(map.get("latitude"))));
+                        longitudes.add(Double.parseDouble(String.valueOf(map.get("longitude"))));
 
                     }
                 }
@@ -205,14 +207,15 @@ public class AvailablePickers extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        for(String id: garbageLocationIds){
+                        for(int i =0;i< garbageLocationIds.size();i++){
 
                             Log.d("GAR_ID",pickersIds.get(position));
                             final HashMap<String, Object> updatePickerID = new HashMap<String, Object>();
                             updatePickerID.put("collectorid",pickersIds.get(position));
-                            ref.child("Detected").child(id).updateChildren(updatePickerID);
+                            ref.child("Detected").child(garbageLocationIds.get(i)).updateChildren(updatePickerID);
 
-                            task newTask = new task(latitude,longitude,false);
+
+                            task newTask = new task(latitudes.get(i),longitudes.get(i),false);
                             final String uniqueID = UUID.randomUUID().toString();
                             String taskID = (uniqueID.substring(uniqueID.length()-8));
 

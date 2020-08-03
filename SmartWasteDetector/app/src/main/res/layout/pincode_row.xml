@@ -55,7 +55,8 @@
             android:text="Assign"
             android:textColor="#FFF"
             android:fontFamily="@font/poppins_bold"
-            android:background="@drawable/gradient_round_btn"/>
+            android:background="@drawable/gradient_round_btn"
+            />
 
         </RelativeLayout>
 
