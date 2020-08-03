@@ -2875,7 +2875,7 @@ function initMap(){
 
    var input = document.getElementById('SearchBox');
    var searchBox = new google.maps.places.SearchBox(input);
-   console.log("PLACES ",input);
+//    console.log("PLACES ",input);
 
 
    var markers = [];
@@ -2884,7 +2884,7 @@ function initMap(){
 
      var places = searchBox.getPlaces();
 	
-	 console.log("PLACES ",places);
+	//  console.log("PLACES ",places);
      if (places.length == 0) {
        return;
      }
@@ -2899,8 +2899,8 @@ function initMap(){
        
        latitudesearch=place.geometry.location.lat();
        longitudesearch=place.geometry.location.lng();
-       console.log(" LAT ",place.geometry.location.lat());
-       console.log(" LONG ",place.geometry.location.lng());
+    //    console.log(" LAT ",place.geometry.location.lat());
+    //    console.log(" LONG ",place.geometry.location.lng());
 
        if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position){
@@ -2981,10 +2981,14 @@ function geocodePostion(pos){
 var latitudes = [];
 var longitudes = [];
 var pinCodes = [];
+
 var ragPickersNames = [];
+
 var ragPickersID = [];
+var ragPickerID;
+var pinSelected;
 var ragPickersNumbers = [];
-var finalPincodes = [0];
+var finalPincodes = [];
 var garbageLocationIds = [];
 var pincodesFrequencies = [];
 
@@ -3021,14 +3025,14 @@ function getGarbageLocations(){
 			});
 
 
-			setTimeout(function() {
+			// setTimeout(function() {
 			
 				////////////////////////////////// finalPinCodes  -- Use this to display all unique pincodes in the drop down
 				if(!finalPincodes.includes(dataSnap.val().Pincode)){
-					// console.log(element);
+					console.log("FINAL",dataSnap.val().Pincode);
 					finalPincodes.push(dataSnap.val().Pincode);
 				}
-			},500);
+			// },500);
 			
 		});
 
@@ -3044,8 +3048,36 @@ function getGarbageLocations(){
 	});
 
 }
-		//////////////////// Call this function when a pincode is selected and pass the selected pincode from finalPincodes: setLat_Long_For_Pincode("411024"); ////
-		
+
+
+///// Call this function when pincode is selected
+function pincodeSelected(){
+	var p = document.getElementById("pincodes");
+
+	console.log(p);
+	pinSelected = p.options[p.selectedIndex].value;
+	console.log("SELECTED_PINC ",finalPincodes[1]);
+	console.log(pinSelected);
+
+	setLat_Long_For_Pincode(finalPincodes[pinSelected]);
+}
+
+
+///// Call this function when assign button is clicked.
+function assignBtnCLicked(){
+	var e = document.getElementById("ragpickers");
+
+	console.log(e);
+	ragPickerID = e.options[e.selectedIndex].value;
+	console.log("SELECTED ",ragPickersID[ragPickerID]);
+	assignTasks(ragPickersID[ragPickerID]);
+	console.log(ragPickerID);
+}
+
+
+
+
+//////////////////// Call this function when a pincode is selected and pass the selected pincode from finalPincodes: setLat_Long_For_Pincode("411024"); ////	
 
  finalLatitude = [];
  finalLongitude = [];
@@ -3061,27 +3093,31 @@ function setLat_Long_For_Pincode(pincode){
 			console.log(" LONG: ",longitudes[i]);
 		}
 
-		if(i == pinCodes.length-1){
+		// if(i == pinCodes.length-1){
 
 
-			////////////////////// Call this when a picker is selected /////
-			/// Pass the id of the selected picker from ragPickersID list ////////
-			assignTasks("ahdjasdd123");
-		}
+		// 	////////////////////// Call this when a picker is selected /////
+		// 	/// Pass the id of the selected picker from ragPickersID list ////////
+		// 	// assignTasks("ahdjasdd123");
+		// }
 	}
 
 	
 
 }
 
-function assignTasks(ragPickerID) {
+function assignTasks(id) {
+
 	var ref = firebase.database().ref();
 
 	for (let i = 0; i < finalPincodes.length; i++) {
 		latitude = finalLatitude[i];
 		longitude = finalLongitude[i];
-
-		ref.child("users").child(ragPickerID).child("Tasks").child(makeid(5)).set({
+		
+		console.log("ID ",id)
+		console.log("Lat ",latitude);
+		console.log("Long ",longitude);
+		ref.child("users").child(id).child("Tasks").child(makeid(5)).set({
 			Completed: false,
 			latitude: latitude,
 			longitude: longitude
