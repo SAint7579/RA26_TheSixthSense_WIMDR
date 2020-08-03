@@ -239,7 +239,7 @@ class _CaptureState extends State<Capture> {
     enable_upload() async{
       print("One-------------------");
       Size size = MediaQuery.of(context).size;
-      if(renderBoxes(size).isEmpty){
+      if(renderBoxes(size).isEmpty) {
 //      upload();
 //      Padding(
 //        padding: EdgeInsets.only(left: 100.0,bottom: 100.0),
@@ -248,9 +248,11 @@ class _CaptureState extends State<Capture> {
 //        ),
 //      );
 
-        print("Started!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        print(
+            "Started!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         String filepath = '${DateTime.now()}.png';
-        final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(filepath);
+        final StorageReference firebaseStorageRef = FirebaseStorage.instance
+            .ref().child(filepath);
         StorageUploadTask task = firebaseStorageRef.putFile(_image);
 //    imageRef = (await (await task.onComplete).ref.getDownloadURL()).toString();
 
@@ -261,23 +263,22 @@ class _CaptureState extends State<Capture> {
 
         var count = 0;
         database.child("'image - $count'").push().set({
-          'image' : imageRef,
-          'time' : DateTime.now().toString(),
-          'Cleaned' : true,
-        }).whenComplete(() {
-          Padding(
-            padding: EdgeInsets.only(left: 100.0,bottom: 100.0),
-            child: Text(
-              "🔥🔥🔥🔥🔥🔥",
-            ),
-          );
+          'image': imageRef,
+          'time': DateTime.now().toString(),
+          'Cleaned': true,
         });
+        showDialog(context: context, child:
+        new AlertDialog(
+          title: new Text("Successfully uploaded"),
+          content: new Text("Your image has been uploaded successfully!!"),
+        )
+        );
       }
       else{
         showDialog(context: context, child:
         new AlertDialog(
           title: new Text("Image contain waste"),
-          content: new Text("😢😢😢 Your image can't be uploaded as it contains waste"),
+          content: new Text("Your image can't be uploaded as it contains waste!😢😢😢"),
         )
         );
       }
