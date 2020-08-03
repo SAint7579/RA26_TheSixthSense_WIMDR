@@ -48,6 +48,40 @@ This model works on the server side. Using SSDMobileNetv2, we can identify diffe
 #### Instructions:
 In the repo directory "RA26_TheSixthSense_WIMDR/segregation_model/", open the "proc_video.py" file and add an image source to the variable IMDIR. Running the code will show you the output of the image with the type of waste tagged. You can also check some created outputs in the directory "RA26_TheSixthSense_WIMDR/segregation_model/detect_out/".
 
+## Manager and collector ecosystem
+
+### Manager Website and app
+This site and app allows the manager to see the detected waste and assign the tasks to ragpickers. These will be uploaded to our firebase DB.<br>
+Manager's app : "RA26_TheSixthSense_WIMDR/SmartWasteDetector/"<br>
+Manager's website : "RA26_TheSixthSense_WIMDR/SmartWasteWebsite"
+
+### Tech Stack:
+- Android and Andriod Studios
+- Javascript
+- CSS
+- Google Maps API
+- HTML
+- Firebase
+
+### Screenshot:
+- <b>App:</b><br>
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/mngr.png" width="300" height="600"></img>
+- <b>Website:</b>
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/mngr-web.png" ></img>
+
+### Ragpicker's app
+This app shows the assigned task to the ragpickers and help them navigate to it. This system also let's them mark the completion of the task. This can be done by clicking the picture of the area with the application and using computer vision to ensure that the picture has not garpage in it. If the picture is clean, then the ragpicker can upload the image. <br>
+Ragpicker's app : "RA26_TheSixthSense_WIMDR/Ragpicker-App/"<br>
+
+### Tech Stack:
+- Flutter
+- Tensorflow Lite
+- Google Maps API
+- Firebase
+
+### Screenshot:
+<img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/collector_app.png" width="300" height="600"></img>
+
 ## Others
 
 ### Device Render:
@@ -63,5 +97,13 @@ This is a simple webpage that tells the administrator about which devices are ac
 ### Screenshot:
 <img src = "https://github.com/ShivamShrirao/RA26_TheSixthSense_WIMDR/blob/master/Sample_Images/monitor.png"></img>
 
+### Imagetagger App
+This is the application which we used to make our custom dataset.
+
+### Misc
+- Firebase connectivity
+- GPS location fetcher
+- Waste Index calculator
+- UDP Streaming between source and server for drones
 
 
