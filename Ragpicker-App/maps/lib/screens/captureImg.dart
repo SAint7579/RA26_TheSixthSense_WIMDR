@@ -112,12 +112,6 @@ class _CaptureState extends State<Capture> {
 
     imageRef = dowurl.toString();
 
-//    if(task.isComplete){
-//      imageRef = await .getDownloadURL().toString();
-////      print(imageRef);
-//      Text('🔥🔥🔥');
-//    }
-
     var count = 0;
     database.child("'image - $count'").push().set({
       'image' : imageRef,
@@ -152,11 +146,9 @@ class _CaptureState extends State<Capture> {
 
   List<Widget> renderBoxes(Size screen){
     if(_recognitions == null) {
-      upload();
       return [];
     }
     if(_imageWidth == null || _imageHeight == null) {
-      upload();
       return [];
     }
 
@@ -189,6 +181,8 @@ class _CaptureState extends State<Capture> {
       );
     }).toList();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -242,14 +236,62 @@ class _CaptureState extends State<Capture> {
       ));
     }
 
+    enable_upload() async{
+      print("One-------------------");
+      Size size = MediaQuery.of(context).size;
+      if(renderBoxes(size).isEmpty) {
+//      upload();
+//      Padding(
+//        padding: EdgeInsets.only(left: 100.0,bottom: 100.0),
+//        child: Text(
+//          "🔥🔥🔥🔥🔥🔥",
+//        ),
+//      );
+
+        print(
+            "Started!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        String filepath = '${DateTime.now()}.png';
+        final StorageReference firebaseStorageRef = FirebaseStorage.instance
+            .ref().child(filepath);
+        StorageUploadTask task = firebaseStorageRef.putFile(_image);
+//    imageRef = (await (await task.onComplete).ref.getDownloadURL()).toString();
+
+//    Uri downloadUrl = (await task.future).downloadUrl;
+        var dowurl = await (await task.onComplete).ref.getDownloadURL();
+
+        imageRef = dowurl.toString();
+
+        var count = 0;
+        database.child("'image - $count'").push().set({
+          'image': imageRef,
+          'time': DateTime.now().toString(),
+          'Cleaned': true,
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+          title: new Text("Successfully uploaded"),
+          content: new Text("Your image has been uploaded successfully!!"),
+        )
+        );
+      }
+      else{
+        showDialog(context: context, child:
+        new AlertDialog(
+          title: new Text("Image contain waste"),
+          content: new Text("Your image can't be uploaded as it contains waste!😢😢😢"),
+        )
+        );
+      }
+    }
+
     void handleClick(String value) {
       switch (value) {
         case 'Click':
           selectFromImagePicker();
           break;
-//        case 'Upload':
-//          selectFromImagePicker();
-//          break;
+        case 'Upload':
+          enable_upload();
+          break;
       }
     }
 
@@ -261,7 +303,7 @@ class _CaptureState extends State<Capture> {
             PopupMenuButton<String>(
               onSelected: handleClick,
               itemBuilder: (BuildContext context) {
-                return {'Click'}.map((String choice) {
+                return {'Click','Upload'}.map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),
