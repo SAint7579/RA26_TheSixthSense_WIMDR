@@ -92,7 +92,7 @@ function signUp(){
 }
 
 function writeUserData(userId, name, email) {
-  firebase.database().ref('users/' + userId).set({
+  firebase.database().ref('Managers/' + userId).set({
     username: name,
     email: email
     }).then(function() {

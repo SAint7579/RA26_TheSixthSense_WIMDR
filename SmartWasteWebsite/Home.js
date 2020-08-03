@@ -2995,16 +2995,22 @@ function getGarbageLocations(){
 	var ref = firebase.database().ref();
 	ref.child("Detected").on("child_added",function(snapshot){
 
-		console.log(" LOC ",snapshot.key);
+		// console.log(" LOC ",snapshot.key);
 		// let snapVal = snapshot.val();
 		garbageLocationIds.push(snapshot.key);
 
 		ref.child("Detected").child(snapshot.key).on('value',function(dataSnap){
-			console.log(" DATA ",dataSnap.val().latitude);
+			// console.log(" DATA ",dataSnap.val().latitude);
 			
 			latitudes.push(dataSnap.val().latitude);
 			longitudes.push(dataSnap.val().longitude);
 			pinCodes.push(dataSnap.val().Pincode);
+
+			// if(!pinCodes.includes(dataSnap.val().Pincode)){
+			// console.log(dataSnap.val().Pincode);
+			// pinCodes.push(dataSnap.val().Pincode);
+			// }
+
 			var location = new google.maps.LatLng(dataSnap.val().latitude, dataSnap.val().longitude);
 
 			new google.maps.Marker({
@@ -3013,29 +3019,88 @@ function getGarbageLocations(){
 				title: "Garbage"
 				// icon: "Location.png"
 			});
-			// setTimeout(function() {
-			// 	pinCodes.forEach(function(pinCode,index) {
-			// 		var cnt = finalPincodes.reduce(function(acc,current){
-			// 			return acc + (current === pinCode);
-			// 		});
-					
-			// 		if(cnt === 0){
-			// 			finalPincodes.push(pinCode);
-			// 			console.log(" FINAL "+ finalPincodes[index]);
 
-			// 		}
-			// 	});
-			// },500);
-				
 
+			setTimeout(function() {
+			
+				////////////////////////////////// finalPinCodes  -- Use this to display all unique pincodes in the drop down
+				if(!finalPincodes.includes(dataSnap.val().Pincode)){
+					// console.log(element);
+					finalPincodes.push(dataSnap.val().Pincode);
+				}
+			},500);
 			
 		});
 
 	});
+
+	ref.child("users").on("child_added",function(snapshot){
+		
+		////////////////////////////////// ragPickersNames  -- Use this to display all Names of rag pickers in the drop down
+
+		ragPickersID.push(snapshot.key);
+		ragPickersNames.push(snapshot.val().name);
+
+	});
+
+}
+		//////////////////// Call this function when a pincode is selected and pass the selected pincode from finalPincodes: setLat_Long_For_Pincode("411024"); ////
+		
+
+ finalLatitude = [];
+ finalLongitude = [];
+
+function setLat_Long_For_Pincode(pincode){
+
+	for (let i = 0; i < pinCodes.length; i++) {
+	    element = pinCodes[i];
+		if(element == pincode){
+			finalLatitude.push(latitudes[i]);
+			finalLongitude.push(longitudes[i]);
+			console.log(" LAT: ",latitudes[i]);
+			console.log(" LONG: ",longitudes[i]);
+		}
+
+		if(i == pinCodes.length-1){
+
+
+			////////////////////// Call this when a picker is selected /////
+			/// Pass the id of the selected picker from ragPickersID list ////////
+			assignTasks("ahdjasdd123");
+		}
+	}
+
+	
+
+}
+
+function assignTasks(ragPickerID) {
+	var ref = firebase.database().ref();
+
+	for (let i = 0; i < finalPincodes.length; i++) {
+		latitude = finalLatitude[i];
+		longitude = finalLongitude[i];
+
+		ref.child("users").child(ragPickerID).child("Tasks").child(makeid(5)).set({
+			Completed: false,
+			latitude: latitude,
+			longitude: longitude
+		})
+	}
+
+	
 }
 
 
 
 
-
+function makeid(length) {
+	var result           = '';
+	var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var charactersLength = characters.length;
+	for ( var i = 0; i < length; i++ ) {
+	   result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+ }
 
